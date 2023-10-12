@@ -8,8 +8,6 @@ export default function IndexPage() {
   const [image, setImage] = useState(null);
   const [textResult, setTextResult] = useState("Hi")
 
-  const worker = await createWorker('eng') // used to convert image to text
-
   function uploadHandler() {
     if (!image) {
       console.log('No file selected')
@@ -19,8 +17,14 @@ export default function IndexPage() {
   // imgToTxt: uses TesseractJS to convert image to text
   // parameters: 
   //    img: URL of png/jpg/jpeg
-  async function imgToTxt(img) {
-    const data = await worker.recognize(img)
+  async function imgToTxt(img, callback) {
+    const worker = await createWorker('eng') // used to convert image to text
+    const output = await worker.recognize(img)
+    const result = output.data.text // text generated from image
+
+    await worker.terminate()
+    callback(result)
+    return result
   }
 
 // new imgToTxt function
@@ -45,11 +49,8 @@ export default function IndexPage() {
       <p>Text: {textResult}</p>
       <button onClick={() => setImage(null)}>Remove</button>
       <br />
-      <button onClick={() => {
-        let text = imgToTxt(image)
-        setTextResult(text)
-        console.log(textResult)
-        console.log(text)
+      <button onClick={async() => {
+        const text = await imgToTxt(image, setTextResult)
       }}>Test</button>
       <br />
       <button onClick={()=>console.log(textResult)}>TextResult</button>
