@@ -51,6 +51,8 @@ export default function IndexPage() {
       <br />
       <button onClick={async() => {
         const text = await imgToTxt(image, setTextResult)
+        // NOTE: setTextResult is given as the parameter to imgToTxt as a callback function
+        //       so it runs after the Tesseract worker is done processing
       }}>Test</button>
       <br />
       <button onClick={()=>console.log(textResult)}>TextResult</button>
