@@ -1,33 +1,11 @@
 import * as React from 'react'
 import { useState, useEffect } from 'react'
-import { createWorker } from 'tesseract.js'
-
+import { imgToTxt } from './imgToTxt'
 
 export default function IndexPage() {
 
   const [image, setImage] = useState(null);
   const [textResult, setTextResult] = useState("Hi")
-
-  function uploadHandler() {
-    if (!image) {
-      console.log('No file selected')
-      return
-    }
-  }
-  // imgToTxt: uses TesseractJS to convert image to text
-  // parameters: 
-  //    img: URL of png/jpg/jpeg
-  async function imgToTxt(img, callback) {
-    const worker = await createWorker('eng') // used to convert image to text
-    const output = await worker.recognize(img)
-    const result = output.data.text // text generated from image
-
-    await worker.terminate()
-    callback(result)
-    return result
-  }
-
-// new imgToTxt function
 
   return (
     <>
